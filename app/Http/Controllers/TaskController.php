@@ -53,7 +53,10 @@ class TaskController extends Controller
     {
         $this->authorize('canAssign',$task);
 
-        $task->update(['assigned'=>\request('assigned')]);
+        $task->update([
+            'assigned'=>\request('assigned'),
+            'assigner'=>auth()->id()
+            ]);
 
         return redirect()->route('tasks.index');
     }
