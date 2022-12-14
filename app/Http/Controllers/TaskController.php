@@ -30,16 +30,14 @@ class TaskController extends Controller
 
         return redirect()->route('tasks.index');
     }
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
+
+    public function show(Task $task)
     {
-        //
+        $this->authorize('isAssignedUser',$task);
+
+        return view('task.show',compact('task'));
     }
+
 
     /**
      * Show the form for editing the specified resource.
