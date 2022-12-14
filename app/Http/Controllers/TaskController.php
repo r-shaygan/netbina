@@ -61,7 +61,12 @@ class TaskController extends Controller
         return redirect()->route('tasks.index');
     }
 
+    public function ownTasks()
+    {
+        $tasks=Task::where('owner',auth()->id())->get();
 
+        return view('task.own-tasks',compact('tasks'));
+    }
 
     /**
      * Show the form for editing the specified resource.
