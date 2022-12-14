@@ -27,5 +27,31 @@
             <span>{{$task->ownerUser->name}}</span>
         </div>
 
+        @php
+            /**
+           * @var $task \App\Models\Task
+           * @var $user \App\Models\User
+            */
+        @endphp
+
+        @if($task->isPending())
+
+            <a href="{{route('tasks.accept',[$task->id])}}"
+               class="text-white inline-block mt-16 text-lg px-8 py-2 bg-green-700 rounded">confirm</a>
+
+            <div class="my-8 text-2xl font-bold">OR</div>
+
+            <form action="{{route('tasks.assign',[$task->id])}}" method="post">
+                @csrf
+                <label class="text-lg align-middle">assign to:</label>
+                <select class="ml-4 rounded"  name="assigned">
+                    @foreach($users as $user)
+                        @continue($user==auth()->user())
+                        <option value="{{$user->id}}">{{$user->name}}</option>
+                    @endforeach
+                </select>
+                <button type="submit" class="bg-cyan-600 text-white py-2 px-4 rounded">submit</button>
+            </form>
+        @endif
     </div>
 </x-app-layout>

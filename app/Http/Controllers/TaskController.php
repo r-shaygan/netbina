@@ -35,8 +35,29 @@ class TaskController extends Controller
     {
         $this->authorize('isAssignedUser',$task);
 
-        return view('task.show',compact('task'));
+        $users=User::all();
+
+        return view('task.show',compact('task','users'));
     }
+
+    public function accept(Task $task)
+    {
+        $this->authorize('canAccept',$task);
+
+        $task->update(['status'=>1]);
+
+        return redirect()->route('tasks.index');
+    }
+
+    public function assign(Task $task)
+    {
+        $this->authorize('canAssign',$task);
+
+        $task->update(['assigned'=>\request('assigned')]);
+
+        return redirect()->route('tasks.index');
+    }
+
 
 
     /**

@@ -15,5 +15,13 @@ class TaskPolicy
         return $task->assigned === $user->id;
     }
 
+    public function canAccept(User $user,Task $task): bool
+    {
+        return $this->isAssignedUser($user,$task) && $task->isPending();
+    }
 
+    public function canAssign(User $user,Task $task)
+    {
+        return $task->isPending() && $this->isAssignedUser($user,$task);
+    }
 }
