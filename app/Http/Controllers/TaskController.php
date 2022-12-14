@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\TaskRequest;
+use App\Models\Task;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class TaskController extends Controller
@@ -16,27 +19,20 @@ class TaskController extends Controller
         //
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
-        //
+        return view('task.create',['users'=>User::all()]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+    public function store(TaskRequest $request)
     {
-        //
-    }
+        Task::make($request->all()+['assigner'=>auth()->id(),
+                'owner'=>auth()->id(),
+                'status'=> $this->setStatus()
+            ])->save();
 
+        return redirect()->route('tasks.index');
+    }
     /**
      * Display the specified resource.
      *
@@ -81,4 +77,10 @@ class TaskController extends Controller
     {
         //
     }
+
+    private function setStatus():bool
+    {
+        return \request('assigned') === auth()->id();
+    }
+
 }
