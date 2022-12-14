@@ -9,14 +9,11 @@ use Illuminate\Http\Request;
 
 class TaskController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
-        //
+        $tasks=Task::where('assigned',auth()->id())->get();
+
+        return view('task.index',compact('tasks'));
     }
 
     public function create()

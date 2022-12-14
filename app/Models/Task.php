@@ -18,4 +18,29 @@ class Task extends Model
             set: fn($value) => date('Y-m-d H:i:00', strtotime($value))
         );
     }
+
+    public function assignerUser()
+    {
+        return $this->belongsTo(User::class, 'assigner', 'id');
+    }
+
+    public function ownerUser()
+    {
+        return $this->belongsTo(User::class, 'owner', 'id');
+    }
+
+    public function isDelayed():bool
+    {
+        return strtotime($this->deadline) < time() && $this->status==0;
+    }
+
+    public function isPending()
+    {
+        return strtotime($this->deadline) >= time() && $this->status==0;
+    }
+
+    public function isAccepted()
+    {
+        return  $this->status==1;
+    }
 }
