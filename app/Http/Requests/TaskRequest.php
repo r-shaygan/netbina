@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class TaskRequest extends FormRequest
 {
@@ -22,7 +23,7 @@ class TaskRequest extends FormRequest
             'title'=>'required|min:3|max:100',
             'description'=>'required|min:3|max:500',
             'deadline'=>'required|date|after:+30 minute',
-            'assigned'=>'required|exists:users,id'
+            'assigned'=>['exists:users,id',Rule::requiredIf(fn()=>$this->route()->getName()=='tasks.store')]
         ];
     }
 

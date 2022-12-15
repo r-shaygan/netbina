@@ -24,4 +24,14 @@ class TaskPolicy
     {
         return $task->isPending() && $this->isAssignedUser($user,$task);
     }
+
+    public function canModify(User $user,Task $task)
+    {
+        return $this->isOwner($user,$task) && $task->isPending();
+    }
+
+    public function isOwner(User $user,Task $task)
+    {
+        return $task->owner==$user->id;
+    }
 }

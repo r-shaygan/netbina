@@ -68,38 +68,28 @@ class TaskController extends Controller
         return view('task.own-tasks',compact('tasks'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
+    public function edit(Task $task)
     {
-        //
+        return view('task.edit',compact('task'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
+    public function update(TaskRequest $request, Task $task)
     {
-        //
+        $this->authorize('canModify',$task);
+
+        $task->update($request->all(['title','deadline','description']));
+
+        return redirect()->route('tasks.own');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
+
+    public function destroy(Task $task)
     {
-        //
+        $this->authorize('canModify',$task);
+
+        $task->delete();
+
+        return redirect()->route('tasks.own');
     }
 
     private function setStatus():bool
